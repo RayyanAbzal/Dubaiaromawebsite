@@ -133,7 +133,9 @@ export function ProductCard({
           </div>
           <div className="p-4 space-y-3 card-content">
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{category}</p>
+              {brand && (
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{brand}</p>
+              )}
               <h3 className="line-clamp-1">{name}</h3>
               {notes.length > 0 && (
                 <p className="text-xs text-muted-foreground mt-1">

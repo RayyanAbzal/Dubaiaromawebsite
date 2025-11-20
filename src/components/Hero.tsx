@@ -27,9 +27,9 @@ export function Hero() {
                 Shop Collection
               </Button>
             </Link>
-            <Link to="/about">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 hover:text-white">
-                Visit Store
+            <Link to="/stores">
+              <Button size="lg" className="bg-white hover:bg-white/90 text-black border-2 border-white shadow-lg">
+                Visit Our Stores
               </Button>
             </Link>
           </div>
