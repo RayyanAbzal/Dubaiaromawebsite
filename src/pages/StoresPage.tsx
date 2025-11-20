@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { MapPin, Phone, Mail, Clock, Navigation, Search } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Navigation, Search, ExternalLink } from 'lucide-react';
 import { stores } from '../utils/mockData';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 
@@ -17,6 +17,30 @@ export function StoresPage() {
     store.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
     store.address.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Generate Google Maps URL showing all stores
+  const generateAllStoresMapUrl = () => {
+    // Create markers for all stores
+    const markers = stores.map(store => 
+      `markers=color:red%7Clabel:${store.id}%7C${store.coordinates.lat},${store.coordinates.lng}`
+    ).join('&');
+    
+    // Calculate center point (average of all coordinates)
+    const centerLat = stores.reduce((sum, store) => sum + store.coordinates.lat, 0) / stores.length;
+    const centerLng = stores.reduce((sum, store) => sum + store.coordinates.lng, 0) / stores.length;
+    
+    return `https://www.google.com/maps/embed/v1/view?key=YOUR_API_KEY&center=${centerLat},${centerLng}&zoom=7`;
+  };
+
+  // Generate individual store map URL
+  const generateStoreMapUrl = (store: typeof stores[0]) => {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.address + ', ' + store.city)}&query_place_id=${store.coordinates.lat},${store.coordinates.lng}`;
+  };
+
+  // Generate directions URL
+  const getDirectionsUrl = (store: typeof stores[0]) => {
+    return `https://www.google.com/maps/dir/?api=1&destination=${store.coordinates.lat},${store.coordinates.lng}`;
+  };
 
   return (
     <>
@@ -33,6 +57,98 @@ export function StoresPage() {
       {/* Store Locator */}
       <section className="py-16">
         <div className="container mx-auto px-4">
+          {/* All Stores Map */}
+          <div className="mb-16">
+            <div className="text-center mb-8">
+              <h2 className="mb-3">All Store Locations</h2>
+              <p className="text-muted-foreground">
+                Find your nearest Dubai Aroma store across New Zealand
+              </p>
+            </div>
+            
+            <Card className="overflow-hidden max-w-6xl mx-auto">
+              <CardContent className="p-0">
+                {/* Map Container */}
+                <div className="relative aspect-[16/10] bg-muted">
+                  {/* Interactive Map showing all stores */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-sand-100 to-sand-200">
+                    <div className="text-center space-y-4 p-8">
+                      <MapPin className="h-16 w-16 text-secondary mx-auto mb-4" />
+                      <h3>Store Locations Map</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto mb-6">
+                        Click on any store below to view its location on Google Maps, or use the button to view all stores together.
+                      </p>
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        {stores.map((store) => (
+                          <Button
+                            key={store.id}
+                            variant="outline"
+                            size="sm"
+                            asChild
+                          >
+                            <a
+                              href={getDirectionsUrl(store)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="gap-2"
+                            >
+                              <MapPin className="h-3 w-3" />
+                              {store.name}
+                              <ExternalLink className="h-3 w-3" />
+                            </a>
+                          </Button>
+                        ))}
+                      </div>
+                      <div className="pt-4">
+                        <Button size="lg" asChild>
+                          <a
+                            href="https://www.google.com/maps/search/Dubai+Aroma+New+Zealand"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Navigation className="h-4 w-4 mr-2" />
+                            View All on Google Maps
+                          </a>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Store Quick Links */}
+                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x">
+                  {stores.map((store, index) => (
+                    <button
+                      key={store.id}
+                      onClick={() => {
+                        setSelectedStore(store);
+                        const element = document.getElementById('store-details');
+                        element?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="p-6 hover:bg-muted/50 transition-colors text-left"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center">
+                          {index + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="mb-1 truncate">{store.name}</h4>
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {store.address}, {store.city}
+                          </p>
+                          <div className="flex items-center gap-2 mt-2">
+                            <Phone className="h-3 w-3 text-secondary" />
+                            <span className="text-xs">{store.phone}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
           {/* Search */}
           <div className="max-w-xl mx-auto mb-12">
             <div className="relative">
@@ -202,7 +318,7 @@ export function StoresPage() {
                       <div className="mt-8 space-y-3">
                         <Button className="w-full" size="lg" asChild>
                           <a 
-                            href={`https://www.google.com/maps/search/?api=1&query=${selectedStore.coordinates.lat},${selectedStore.coordinates.lng}`}
+                            href={getDirectionsUrl(selectedStore)}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -230,7 +346,7 @@ export function StoresPage() {
                         <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                           <Button asChild>
                             <a
-                              href={`https://www.google.com/maps/search/?api=1&query=${selectedStore.coordinates.lat},${selectedStore.coordinates.lng}`}
+                              href={generateStoreMapUrl(selectedStore)}
                               target="_blank"
                               rel="noopener noreferrer"
                             >
