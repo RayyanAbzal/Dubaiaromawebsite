@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Textarea } from '../components/ui/textarea';
 import {
   Dialog,
   DialogContent,
@@ -22,112 +23,14 @@ import {
   Shield,
   Truck,
   Star,
-  Share2
+  Share2,
+  ThumbsUp
 } from 'lucide-react';
 import { ProductCard } from '../components/ProductCard';
-
-interface Product {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  image: string;
-  notes: string[];
-  inStock: boolean;
-  isPopular: boolean;
-  popularity: number;
-  description: string;
-  size: string;
-  concentration: string;
-  topNotes: string[];
-  middleNotes: string[];
-  baseNotes: string[];
-  images: string[];
-}
-
-const allProducts: Product[] = [
-  {
-    id: 1,
-    name: 'Oud Royale',
-    category: "Men's Fragrances",
-    price: 185,
-    image: 'https://images.unsplash.com/photo-1737424065216-bc51dd626175?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvdWQlMjBmcmFncmFuY2UlMjBib3R0bGV8ZW58MXx8fHwxNzYxNzAwMDE0fDA&ixlib=rb-4.1.0&q=80&w=1080',
-    notes: ['Oud', 'Amber', 'Sandalwood'],
-    inStock: true,
-    isPopular: true,
-    popularity: 95,
-    description: 'A majestic blend of rare oud wood and warm amber, Oud Royale embodies luxury and sophistication. This rich, complex fragrance opens with spicy notes before revealing a heart of pure oud and amber, settling into a warm base of sandalwood and vanilla.',
-    size: '100ml',
-    concentration: 'Eau de Parfum',
-    topNotes: ['Saffron', 'Cardamom'],
-    middleNotes: ['Oud', 'Amber', 'Rose'],
-    baseNotes: ['Sandalwood', 'Vanilla', 'Musk'],
-    images: [
-      'https://images.unsplash.com/photo-1737424065216-bc51dd626175?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvdWQlMjBmcmFncmFuY2UlMjBib3R0bGV8ZW58MXx8fHwxNzYxNzAwMDE0fDA&ixlib=rb-4.1.0&q=80&w=1080',
-      'https://images.unsplash.com/photo-1650686036849-ff87bcaa2e9e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBhcmFiaWMlMjBwZXJmdW1lfGVufDF8fHx8MTc2MTU3NTgwMHww&ixlib=rb-4.1.0&q=80&w=1080'
-    ]
-  },
-  {
-    id: 2,
-    name: 'Rose de Damascus',
-    category: "Women's Fragrances",
-    price: 165,
-    image: 'https://images.unsplash.com/photo-1759793499819-bf60128a54b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwZnJhZ3JhbmNlJTIwZGlzcGxheXxlbnwxfHx8fDE3NjE2OTk2NDV8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    notes: ['Rose', 'Jasmine', 'Musk'],
-    inStock: true,
-    isPopular: true,
-    popularity: 88,
-    description: 'An exquisite tribute to the legendary Damascene rose. This elegant fragrance captures the essence of fresh rose petals with hints of jasmine and a soft musky base.',
-    size: '100ml',
-    concentration: 'Eau de Parfum',
-    topNotes: ['Bergamot', 'Pink Pepper'],
-    middleNotes: ['Damascus Rose', 'Jasmine', 'Peony'],
-    baseNotes: ['Musk', 'Amber', 'Cedarwood'],
-    images: [
-      'https://images.unsplash.com/photo-1759793499819-bf60128a54b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwZnJhZ3JhbmNlJTIwZGlzcGxheXxlbnwxfHx8fDE3NjE2OTk2NDV8MA&ixlib=rb-4.1.0&q=80&w=1080'
-    ]
-  },
-  {
-    id: 3,
-    name: 'Saffron Noir',
-    category: 'Unisex',
-    price: 145,
-    image: 'https://images.unsplash.com/photo-1641926364601-2165cf2304cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXNjdWxpbmUlMjBjb2xvZ25lfGVufDF8fHx8MTc2MTY5OTY0Nnww&ixlib=rb-4.1.0&q=80&w=1080',
-    notes: ['Saffron', 'Patchouli', 'Vanilla'],
-    inStock: true,
-    isPopular: false,
-    popularity: 72,
-    description: 'A mysterious and alluring unisex fragrance featuring precious saffron and earthy patchouli, balanced with creamy vanilla.',
-    size: '100ml',
-    concentration: 'Eau de Parfum',
-    topNotes: ['Saffron', 'Nutmeg'],
-    middleNotes: ['Patchouli', 'Leather'],
-    baseNotes: ['Vanilla', 'Amber', 'Tonka Bean'],
-    images: [
-      'https://images.unsplash.com/photo-1641926364601-2165cf2304cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXNjdWxpbmUlMjBjb2xvZ25lfGVufDF8fHx8MTc2MTY5OTY0Nnww&ixlib=rb-4.1.0&q=80&w=1080'
-    ]
-  },
-  {
-    id: 4,
-    name: 'Amber Essence',
-    category: 'Attar Oils',
-    price: 95,
-    image: 'https://images.unsplash.com/photo-1604899083099-75cacc0902dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwcGVyZnVtZXxlbnwxfHx8fDE3NjE2OTk2NDV8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    notes: ['Amber', 'Sandalwood', 'Musk'],
-    inStock: true,
-    isPopular: true,
-    popularity: 90,
-    description: 'A pure attar oil featuring rich amber and sandalwood. Long-lasting and alcohol-free in the traditional Middle Eastern style.',
-    size: '12ml',
-    concentration: 'Pure Attar Oil',
-    topNotes: ['Bergamot'],
-    middleNotes: ['Amber', 'Sandalwood'],
-    baseNotes: ['Musk', 'Vanilla'],
-    images: [
-      'https://images.unsplash.com/photo-1604899083099-75cacc0902dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwcGVyZnVtZXxlbnwxfHx8fDE3NjE2OTk2NDV8MA&ixlib=rb-4.1.0&q=80&w=1080'
-    ]
-  }
-];
+import { allProducts, mockReviews, Review } from '../utils/mockData';
+import { useCart } from '../contexts/CartContext';
+import { useWishlist } from '../contexts/WishlistContext';
+import { toast } from 'sonner';
 
 export function ProductDetailPage() {
   const { id } = useParams();
@@ -136,6 +39,12 @@ export function ProductDetailPage() {
   const [showStoreDialog, setShowStoreDialog] = useState(false);
   const [showClickCollect, setShowClickCollect] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewText, setReviewText] = useState('');
+  const [helpfulReviews, setHelpfulReviews] = useState<Set<number>>(new Set());
+
+  const { addItem } = useCart();
+  const { toggleItem, isInWishlist } = useWishlist();
 
   const product = allProducts.find(p => p.id === Number(id));
 
@@ -148,9 +57,63 @@ export function ProductDetailPage() {
     );
   }
 
+  const inWishlist = isInWishlist(product.id);
   const relatedProducts = allProducts
     .filter(p => p.id !== product.id && p.category === product.category)
     .slice(0, 4);
+
+  const productReviews = mockReviews.filter(r => r.productId === product.id);
+  const averageRating = productReviews.length > 0
+    ? productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length
+    : 5;
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: product.size,
+      brand: product.brand,
+      quantity
+    });
+    toast.success(`${quantity} x ${product.name} added to cart!`);
+  };
+
+  const handleWishlistToggle = () => {
+    toggleItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      inStock: product.inStock
+    });
+    
+    if (inWishlist) {
+      toast.success('Removed from wishlist');
+    } else {
+      toast.success('Added to wishlist');
+    }
+  };
+
+  const handleReviewSubmit = () => {
+    toast.success('Thank you for your review!');
+    setReviewText('');
+    setReviewRating(5);
+  };
+
+  const handleHelpfulClick = (reviewId: number) => {
+    setHelpfulReviews(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(reviewId)) {
+        newSet.delete(reviewId);
+      } else {
+        newSet.add(reviewId);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <>
@@ -220,10 +183,17 @@ export function ProductDetailPage() {
                 <div className="flex items-center gap-2 mb-4">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                      <Star 
+                        key={i} 
+                        className={`h-4 w-4 ${
+                          i < Math.round(averageRating) 
+                            ? 'fill-primary text-primary' 
+                            : 'text-muted-foreground'
+                        }`} 
+                      />
                     ))}
                   </div>
-                  <span className="text-sm text-muted-foreground">(24 reviews)</span>
+                  <span className="text-sm text-muted-foreground">({productReviews.length} reviews)</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <p className="text-3xl">${product.price}</p>
@@ -276,13 +246,13 @@ export function ProductDetailPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <Button size="lg" className="w-full" disabled={!product.inStock}>
+                  <Button size="lg" className="w-full" disabled={!product.inStock} onClick={handleAddToCart}>
                     <ShoppingCart className="h-4 w-4 mr-2" />
                     Add to Cart
                   </Button>
-                  <Button size="lg" variant="outline" className="w-full">
-                    <Heart className="h-4 w-4 mr-2" />
-                    Wishlist
+                  <Button size="lg" variant="outline" className="w-full" onClick={handleWishlistToggle}>
+                    <Heart className={`h-4 w-4 mr-2 ${inWishlist ? 'fill-current text-red-500' : ''}`} />
+                    {inWishlist ? 'In Wishlist' : 'Wishlist'}
                   </Button>
                 </div>
 
@@ -331,7 +301,7 @@ export function ProductDetailPage() {
             </div>
           </div>
 
-          {/* Fragrance Notes Tabs */}
+          {/* Fragrance Notes & Reviews Tabs */}
           <div className="mt-16">
             <Tabs defaultValue="notes" className="w-full">
               <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
@@ -339,7 +309,7 @@ export function ProductDetailPage() {
                   Fragrance Notes
                 </TabsTrigger>
                 <TabsTrigger value="reviews" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
-                  Reviews (24)
+                  Reviews ({productReviews.length})
                 </TabsTrigger>
                 <TabsTrigger value="details" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary">
                   Additional Details
@@ -376,8 +346,135 @@ export function ProductDetailPage() {
               </TabsContent>
 
               <TabsContent value="reviews" className="mt-8">
-                <div className="text-center py-12 text-muted-foreground">
-                  Reviews coming soon
+                <div className="space-y-8">
+                  {/* Review Summary */}
+                  <div className="bg-muted/30 p-6 rounded-lg">
+                    <div className="flex items-center gap-6">
+                      <div className="text-center">
+                        <div className="text-4xl mb-2">{averageRating.toFixed(1)}</div>
+                        <div className="flex items-center mb-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              className={`h-4 w-4 ${
+                                i < Math.round(averageRating) 
+                                  ? 'fill-primary text-primary' 
+                                  : 'text-muted-foreground'
+                              }`} 
+                            />
+                          ))}
+                        </div>
+                        <p className="text-sm text-muted-foreground">{productReviews.length} reviews</p>
+                      </div>
+                      <Separator orientation="vertical" className="h-20" />
+                      <div className="flex-1">
+                        {[5, 4, 3, 2, 1].map(rating => {
+                          const count = productReviews.filter(r => r.rating === rating).length;
+                          const percentage = productReviews.length > 0 ? (count / productReviews.length) * 100 : 0;
+                          return (
+                            <div key={rating} className="flex items-center gap-3 mb-2">
+                              <span className="text-sm w-8">{rating} ★</span>
+                              <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                                <div 
+                                  className="h-full bg-primary transition-all"
+                                  style={{ width: `${percentage}%` }}
+                                />
+                              </div>
+                              <span className="text-sm text-muted-foreground w-8">{count}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Write a Review */}
+                  <div className="border rounded-lg p-6">
+                    <h3 className="mb-4">Write a Review</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm mb-2 block">Rating</label>
+                        <div className="flex gap-2">
+                          {[1, 2, 3, 4, 5].map(rating => (
+                            <button
+                              key={rating}
+                              onClick={() => setReviewRating(rating)}
+                              className="transition-colors"
+                            >
+                              <Star 
+                                className={`h-6 w-6 ${
+                                  rating <= reviewRating 
+                                    ? 'fill-primary text-primary' 
+                                    : 'text-muted-foreground'
+                                }`} 
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-sm mb-2 block">Your Review</label>
+                        <Textarea
+                          placeholder="Share your experience with this fragrance..."
+                          value={reviewText}
+                          onChange={(e) => setReviewText(e.target.value)}
+                          rows={4}
+                        />
+                      </div>
+                      <Button onClick={handleReviewSubmit} disabled={!reviewText.trim()}>
+                        Submit Review
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Reviews List */}
+                  <div className="space-y-6">
+                    {productReviews.map(review => (
+                      <div key={review.id} className="border-b pb-6 last:border-0">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span>{review.userName}</span>
+                              {review.verified && (
+                                <Badge variant="secondary" className="text-xs">Verified Purchase</Badge>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star 
+                                    key={i} 
+                                    className={`h-3 w-3 ${
+                                      i < review.rating 
+                                        ? 'fill-primary text-primary' 
+                                        : 'text-muted-foreground'
+                                    }`} 
+                                  />
+                                ))}
+                              </div>
+                              <span className="text-xs text-muted-foreground">
+                                {new Date(review.date).toLocaleDateString('en-NZ', { 
+                                  year: 'numeric', 
+                                  month: 'long', 
+                                  day: 'numeric' 
+                                })}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-muted-foreground mb-3">{review.comment}</p>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleHelpfulClick(review.id)}
+                          className={helpfulReviews.has(review.id) ? 'text-primary' : ''}
+                        >
+                          <ThumbsUp className={`h-3 w-3 mr-1 ${helpfulReviews.has(review.id) ? 'fill-current' : ''}`} />
+                          Helpful ({review.helpful + (helpfulReviews.has(review.id) ? 1 : 0)})
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </TabsContent>
 
@@ -385,7 +482,7 @@ export function ProductDetailPage() {
                 <div className="space-y-4 max-w-2xl">
                   <div className="flex justify-between py-3 border-b">
                     <span className="text-muted-foreground">Brand</span>
-                    <span>Dubai Aroma</span>
+                    <span>{product.brand}</span>
                   </div>
                   <div className="flex justify-between py-3 border-b">
                     <span className="text-muted-foreground">Size</span>
@@ -435,7 +532,7 @@ export function ProductDetailPage() {
               <div className="flex-1">
                 <h4 className="mb-1">Auckland CBD Store</h4>
                 <p className="text-sm text-muted-foreground mb-2">123 Queen Street, Auckland 1010</p>
-                <Badge variant="secondary">In Stock - 5 available</Badge>
+                <Badge variant="secondary">{product.inStock ? 'In Stock - 5 available' : 'Out of Stock'}</Badge>
               </div>
             </div>
           </div>
@@ -478,7 +575,10 @@ export function ProductDetailPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowClickCollect(false)}>Cancel</Button>
-            <Button onClick={() => setShowClickCollect(false)}>Confirm Pickup</Button>
+            <Button onClick={() => {
+              handleAddToCart();
+              setShowClickCollect(false);
+            }}>Confirm Pickup</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

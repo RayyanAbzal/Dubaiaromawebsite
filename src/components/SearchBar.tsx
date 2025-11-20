@@ -149,6 +149,12 @@ export function SearchBar({ onClose }: SearchBarProps) {
     setShowResults(true);
   };
 
+  const handleViewAllResults = () => {
+    navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    setShowResults(false);
+    onClose?.();
+  };
+
   return (
     <div ref={searchRef} className="relative w-full">
       <div className="relative">
@@ -265,6 +271,18 @@ export function SearchBar({ onClose }: SearchBarProps) {
               </div>
             )}
           </div>
+
+          {/* View All Results */}
+          {filteredProducts.length > 0 && (
+            <div className="p-4 border-t">
+              <button
+                onClick={handleViewAllResults}
+                className="w-full text-sm text-muted-foreground hover:text-foreground"
+              >
+                View all results
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

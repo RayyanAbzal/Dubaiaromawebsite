@@ -1,10 +1,11 @@
-import { ShoppingCart, Search, Menu, User, X, MapPin } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, X, MapPin, Heart } from 'lucide-react';
 import { Button } from './ui/button';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { SearchBar } from './SearchBar';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useWishlist } from '../contexts/WishlistContext';
 import {
   Sheet,
   SheetContent,
@@ -20,6 +21,7 @@ export function Header() {
   const location = useLocation();
   const { totalItems } = useCart();
   const { isAuthenticated } = useAuth();
+  const { items: wishlistItems } = useWishlist();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -27,10 +29,10 @@ export function Header() {
     <>
       {/* Top Bar */}
       <div className="bg-primary text-primary-foreground py-2 text-center text-sm">
-        <div className="container mx-auto px-4 flex items-center justify-center gap-2">
+        <Link to="/stores" className="container mx-auto px-4 flex items-center justify-center gap-2 hover:underline">
           <MapPin className="h-4 w-4" />
           <span>Visit our Auckland store | Click & Collect Available</span>
-        </div>
+        </Link>
       </div>
 
       {/* Main Header */}
@@ -84,6 +86,13 @@ export function Header() {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Gift Sets
+                  </Link>
+                  <Link 
+                    to="/stores" 
+                    className="py-2 hover:text-secondary transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Our Stores
                   </Link>
                   <Link 
                     to="/about" 
@@ -164,6 +173,16 @@ export function Header() {
                   {totalItems > 0 && (
                     <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-secondary text-white text-xs flex items-center justify-center">
                       {totalItems}
+                    </span>
+                  )}
+                </Button>
+              </Link>
+              <Link to="/wishlist">
+                <Button variant="ghost" size="icon" className="relative">
+                  <Heart className="h-5 w-5" />
+                  {wishlistItems.length > 0 && (
+                    <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-secondary text-white text-xs flex items-center justify-center">
+                      {wishlistItems.length}
                     </span>
                   )}
                 </Button>

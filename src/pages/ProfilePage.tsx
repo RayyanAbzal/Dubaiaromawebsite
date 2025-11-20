@@ -7,11 +7,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Separator } from '../components/ui/separator';
 import { useAuth } from '../contexts/AuthContext';
+import { useWishlist } from '../contexts/WishlistContext';
+import { useCart } from '../contexts/CartContext';
 import { toast } from 'sonner@2.0.3';
-import { User, MapPin, Package, Heart, LogOut, Mail, Phone } from 'lucide-react';
+import { User, MapPin, Package, Heart, LogOut, Mail, Phone, ShoppingCart, X } from 'lucide-react';
+import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { Badge } from '../components/ui/badge';
 
 export function ProfilePage() {
   const { user, isAuthenticated, signOut, updateProfile } = useAuth();
+  const { items: wishlistItems, removeItem: removeFromWishlist } = useWishlist();
+  const { addItem: addToCart } = useCart();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -72,22 +78,6 @@ export function ProfilePage() {
       total: 185,
       status: 'Delivered',
       items: 1,
-    },
-  ];
-
-  // Mock wishlist
-  const wishlist = [
-    {
-      id: 1,
-      name: 'Oud Royale',
-      price: 185,
-      image: 'https://images.unsplash.com/photo-1737424065216-bc51dd626175?w=200',
-    },
-    {
-      id: 2,
-      name: 'Rose de Damascus',
-      price: 165,
-      image: 'https://images.unsplash.com/photo-1759793499819-bf60128a54b4?w=200',
     },
   ];
 
@@ -337,40 +327,90 @@ export function ProfilePage() {
                   <CardTitle className="flex items-center gap-2">
                     <Heart className="h-5 w-5" />
                     My Wishlist
+                    <Badge variant="secondary">{wishlistItems.length}</Badge>
                   </CardTitle>
                   <CardDescription>
                     Your saved fragrances and gift sets
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {wishlist.map((item) => (
-                      <div
-                        key={item.id}
-                        className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-                      >
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-full h-48 object-cover"
-                        />
-                        <div className="p-4 space-y-3">
-                          <div>
-                            <h3 className="text-sm mb-1">{item.name}</h3>
-                            <p className="text-muted-foreground">${item.price}</p>
+                  {wishlistItems.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {wishlistItems.map((item) => (
+                        <div
+                          key={item.id}
+                          className="group relative border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
+                        >
+                          <button
+                            onClick={() => {
+                              removeFromWishlist(item.id);
+                              toast.success('Removed from wishlist');
+                            }}
+                            className="absolute top-2 right-2 z-10 bg-white rounded-full p-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive hover:text-destructive-foreground"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                          <div 
+                            className="cursor-pointer"
+                            onClick={() => navigate(`/product/${item.id}`)}
+                          >
+                            <ImageWithFallback
+                              src={item.image}
+                              alt={item.name}
+                              className="w-full h-48 object-cover"
+                            />
                           </div>
-                          <div className="flex gap-2">
-                            <Button size="sm" className="flex-1">
-                              Add to Cart
-                            </Button>
-                            <Button size="sm" variant="outline">
-                              Remove
-                            </Button>
+                          <div className="p-4 space-y-3">
+                            <div>
+                              <h3 className="text-sm mb-1">{item.name}</h3>
+                              <p className="text-xs text-muted-foreground mb-1">{item.category}</p>
+                              <p>${item.price}</p>
+                              {!item.inStock && (
+                                <Badge variant="destructive" className="text-xs mt-1">Out of Stock</Badge>
+                              )}
+                            </div>
+                            <div className="flex gap-2">
+                              <Button 
+                                size="sm" 
+                                className="flex-1"
+                                disabled={!item.inStock}
+                                onClick={() => {
+                                  addToCart({
+                                    id: item.id,
+                                    name: item.name,
+                                    price: item.price,
+                                    image: item.image
+                                  });
+                                  toast.success('Added to cart!');
+                                }}
+                              >
+                                <ShoppingCart className="h-3 w-3 mr-1" />
+                                Add to Cart
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => navigate(`/product/${item.id}`)}
+                              >
+                                View
+                              </Button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <Heart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="mb-2">Your wishlist is empty</h3>
+                      <p className="text-muted-foreground mb-6">
+                        Save your favorite fragrances to buy them later
+                      </p>
+                      <Button onClick={() => navigate('/')}>
+                        Browse Products
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

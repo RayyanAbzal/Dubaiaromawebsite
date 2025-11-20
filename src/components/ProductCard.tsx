@@ -6,6 +6,8 @@ import { Badge } from './ui/badge';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useCart } from '../contexts/CartContext';
+import { useWishlist } from '../contexts/WishlistContext';
 import {
   Dialog,
   DialogContent,
@@ -25,6 +27,8 @@ interface ProductCardProps {
   notes?: string[];
   inStock?: boolean;
   isPopular?: boolean;
+  brand?: string;
+  size?: string;
 }
 
 export function ProductCard({ 
@@ -35,11 +39,52 @@ export function ProductCard({
   image, 
   notes = [],
   inStock = true,
-  isPopular = false
+  isPopular = false,
+  brand,
+  size
 }: ProductCardProps) {
   const [showStoreDialog, setShowStoreDialog] = useState(false);
   const [deliveryMethod, setDeliveryMethod] = useState('delivery');
   const navigate = useNavigate();
+  const { addItem } = useCart();
+  const { toggleItem, isInWishlist } = useWishlist();
+
+  const inWishlist = id ? isInWishlist(id) : false;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!id) return;
+    
+    addItem({
+      id,
+      name,
+      price,
+      image,
+      size,
+      brand
+    });
+    toast.success(`${name} added to cart!`);
+  };
+
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!id) return;
+
+    toggleItem({
+      id,
+      name,
+      price,
+      image,
+      category,
+      inStock
+    });
+    
+    if (inWishlist) {
+      toast.success('Removed from wishlist');
+    } else {
+      toast.success('Added to wishlist');
+    }
+  };
 
   const handleCardClick = (e: React.MouseEvent) => {
     // Only navigate if clicking on the card itself, not on buttons
@@ -78,13 +123,12 @@ export function ProductCard({
               </Badge>
             )}
             <button 
-              className="absolute top-3 right-3 rounded-full bg-white p-2 shadow-md transition-all opacity-0 group-hover:opacity-100 hover:bg-secondary hover:text-white"
-              onClick={(e) => {
-                e.stopPropagation();
-                // Add to wishlist logic
-              }}
+              className={`absolute top-3 right-3 rounded-full bg-white p-2 shadow-md transition-all opacity-0 group-hover:opacity-100 ${
+                inWishlist ? 'text-red-500' : 'hover:bg-secondary hover:text-white'
+              }`}
+              onClick={handleWishlistToggle}
             >
-              <Heart className="h-4 w-4" />
+              <Heart className={`h-4 w-4 ${inWishlist ? 'fill-current' : ''}`} />
             </button>
           </div>
           <div className="p-4 space-y-3 card-content">
@@ -117,10 +161,7 @@ export function ProductCard({
                 size="sm" 
                 className="w-full bg-primary hover:bg-primary/90"
                 disabled={!inStock}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add to cart logic
-                }}
+                onClick={handleAddToCart}
               >
                 Add to Cart
               </Button>

@@ -217,10 +217,12 @@ export function CartPage() {
                   </p>
                 </div>
 
-                <Button className="w-full" size="lg">
-                  Proceed to Checkout
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link to="/checkout">
+                  <Button className="w-full" size="lg">
+                    Proceed to Checkout
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
 
                 <Link to="/women">
                   <Button variant="outline" className="w-full">
