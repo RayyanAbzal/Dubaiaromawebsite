@@ -1,1 +1,11 @@
-# repo-template
+
+  # Perfume Store Website
+
+  This is a code bundle for Perfume Store Website. The original project is available at https://www.figma.com/design/7GcCiVybubEtOQfRa0mLSq/Perfume-Store-Website.
+
+  ## Running the code
+
+  Run `npm i` to install the dependencies.
+
+  Run `npm run dev` to start the development server.
+  
