@@ -1,4 +1,5 @@
 import { ShoppingCart, Search, Menu, User, X, MapPin, Heart, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Button } from './ui/button';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
 import { stores } from '../utils/mockData';
@@ -100,76 +101,92 @@ export function ProductCard({
 
   return (
     <>
-      <Card 
-        className="group overflow-hidden border shadow-sm hover:shadow-md transition-all cursor-pointer"
-        onClick={handleCardClick}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        whileHover={{ y: -4 }}
       >
-        <CardContent className="p-0">
-          <div className="relative aspect-[3/4] overflow-hidden bg-muted">
-            <ImageWithFallback
-              src={image}
-              alt={name}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            {isPopular && (
-              <Badge className="absolute top-3 left-3 bg-secondary">
-                Popular
-              </Badge>
-            )}
-            {!inStock && (
-              <Badge variant="destructive" className="absolute top-3 left-3">
-                Out of Stock
-              </Badge>
-            )}
-            <button 
-              className={`absolute top-3 right-3 rounded-full bg-white p-2 shadow-md transition-all opacity-0 group-hover:opacity-100 ${
-                inWishlist ? 'text-red-500' : 'hover:bg-secondary hover:text-white'
-              }`}
-              onClick={handleWishlistToggle}
-            >
-              <Heart className={`h-4 w-4 ${inWishlist ? 'fill-current' : ''}`} />
-            </button>
-          </div>
-          <div className="p-4 space-y-3 card-content">
-            <div>
-              {brand && (
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{brand}</p>
+        <Card 
+          className="group overflow-hidden border shadow-sm hover:shadow-md transition-all cursor-pointer"
+          onClick={handleCardClick}
+        >
+          <CardContent className="p-0">
+            <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+              <ImageWithFallback
+                src={image}
+                alt={name}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              {isPopular && (
+                <Badge className="absolute top-3 left-3 bg-secondary">
+                  Popular
+                </Badge>
               )}
-              <h3 className="line-clamp-1">{name}</h3>
-              {notes.length > 0 && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  Notes: {notes.slice(0, 3).join(', ')}
-                </p>
+              {!inStock && (
+                <Badge variant="destructive" className="absolute top-3 left-3">
+                  Out of Stock
+                </Badge>
               )}
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-lg">${price}</span>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowStoreDialog(true);
-                }}
-                className="text-xs text-secondary hover:underline flex items-center gap-1"
+              <motion.button 
+                className={`absolute top-3 right-3 rounded-full bg-white p-2 shadow-md transition-all opacity-0 group-hover:opacity-100 ${
+                  inWishlist ? 'text-red-500' : 'hover:bg-secondary hover:text-white'
+                }`}
+                onClick={handleWishlistToggle}
+                whileTap={{ scale: 0.85 }}
+                whileHover={{ scale: 1.1 }}
               >
-                <Store className="h-3 w-3" />
-                Check Store
-              </button>
+                <motion.div
+                  animate={inWishlist ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Heart className={`h-4 w-4 ${inWishlist ? 'fill-current' : ''}`} />
+                </motion.div>
+              </motion.button>
             </div>
+            <div className="p-4 space-y-3 card-content">
+              <div>
+                {brand && (
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{brand}</p>
+                )}
+                <h3 className="line-clamp-1">{name}</h3>
+                {notes.length > 0 && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Notes: {notes.slice(0, 3).join(', ')}
+                  </p>
+                )}
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className="text-lg">${price}</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowStoreDialog(true);
+                  }}
+                  className="text-xs text-secondary hover:underline flex items-center gap-1"
+                >
+                  <Store className="h-3 w-3" />
+                  Check Store
+                </button>
+              </div>
 
-            <div className="space-y-2">
-              <Button 
-                size="sm" 
-                className="w-full bg-primary hover:bg-primary/90"
-                disabled={!inStock}
-                onClick={handleAddToCart}
-              >
-                Add to Cart
-              </Button>
+              <div className="space-y-2">
+                <motion.div whileTap={{ scale: 0.98 }}>
+                  <Button 
+                    size="sm" 
+                    className="w-full bg-primary hover:bg-primary/90"
+                    disabled={!inStock}
+                    onClick={handleAddToCart}
+                  >
+                    Add to Cart
+                  </Button>
+                </motion.div>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       {/* Store Availability Dialog */}
       <Dialog open={showStoreDialog} onOpenChange={setShowStoreDialog}>

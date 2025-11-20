@@ -1,5 +1,6 @@
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 export function Hero() {
@@ -13,26 +14,45 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30" />
       <div className="container relative mx-auto h-full px-4 flex items-center">
         <div className="max-w-2xl text-white space-y-6">
-          <div className="space-y-3">
+          <motion.div 
+            className="space-y-3"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
             <p className="text-sm uppercase tracking-[0.3em] text-accent">Discover Luxury</p>
             <h1 className="text-white text-4xl md:text-5xl lg:text-6xl">Authentic Arabian & Designer Fragrances</h1>
-          </div>
-          <p className="text-lg text-white/90 max-w-xl leading-relaxed">
+          </motion.div>
+          <motion.p 
+            className="text-lg text-white/90 max-w-xl leading-relaxed"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          >
             Experience the finest collection of oud, attar oils, and premium perfumes. 
             Now available in Auckland and Hamilton.
-          </p>
-          <div className="flex flex-wrap gap-4 pt-2">
+          </motion.p>
+          <motion.div 
+            className="flex flex-wrap gap-4 pt-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          >
             <Link to="/women">
-              <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-                Shop Collection
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
+                  Shop Collection
+                </Button>
+              </motion.div>
             </Link>
             <Link to="/stores">
-              <Button size="lg" className="bg-white hover:bg-white/90 text-black border-2 border-white shadow-lg">
-                Visit Our Stores
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                <Button size="lg" className="bg-white hover:bg-white/90 text-black border-2 border-white shadow-lg">
+                  Visit Our Stores
+                </Button>
+              </motion.div>
             </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
