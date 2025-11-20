@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { Button } from '../components/ui/button';
@@ -32,6 +32,8 @@ import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
 import { useProducts } from '../contexts/ProductsContext';
 import { toast } from 'sonner';
+import { addToRecentlyViewed } from '../components/RecentlyViewed';
+import { NotifyMeDialog } from '../components/NotifyMeDialog';
 
 export function ProductDetailPage() {
   const { id } = useParams();
@@ -44,11 +46,27 @@ export function ProductDetailPage() {
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
   const [helpfulReviews, setHelpfulReviews] = useState<Set<number>>(new Set());
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
 
   const { addItem } = useCart();
   const { toggleItem, isInWishlist } = useWishlist();
 
   const product = allProducts.find(p => p.id === Number(id));
+
+  // Add to recently viewed when product loads
+  useEffect(() => {
+    if (product) {
+      addToRecentlyViewed({
+        id: product.id,
+        name: product.name,
+        brand: product.brand,
+        price: product.price,
+        image: product.image,
+        notes: product.notes,
+        inStock: product.inStock
+      });
+    }
+  }, [product]);
 
   if (!product) {
     return (
@@ -69,13 +87,36 @@ export function ProductDetailPage() {
     ? productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length
     : 5;
 
+  // Get current price based on selected variant
+  const getCurrentPrice = () => {
+    if (selectedVariant && product.variants) {
+      const variant = product.variants.find(v => v.id === selectedVariant);
+      return variant?.price || product.price;
+    }
+    return product.price;
+  };
+
+  // Check if current selection is in stock
+  const isCurrentlyInStock = () => {
+    if (selectedVariant && product.variants) {
+      const variant = product.variants.find(v => v.id === selectedVariant);
+      return variant?.inStock ?? product.inStock;
+    }
+    return product.inStock;
+  };
+
   const handleAddToCart = () => {
+    const currentPrice = getCurrentPrice();
+    const selectedSize = selectedVariant && product.variants 
+      ? product.variants.find(v => v.id === selectedVariant)?.size 
+      : product.size;
+
     addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: currentPrice,
       image: product.image,
-      size: product.size,
+      size: selectedSize || product.size,
       brand: product.brand,
       quantity
     });
@@ -198,9 +239,9 @@ export function ProductDetailPage() {
                   <span className="text-sm text-muted-foreground">({productReviews.length} reviews)</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <p className="text-3xl">${product.price}</p>
-                  <Badge variant={product.inStock ? "secondary" : "destructive"}>
-                    {product.inStock ? "In Stock" : "Out of Stock"}
+                  <p className="text-3xl">${getCurrentPrice()}</p>
+                  <Badge variant={isCurrentlyInStock() ? "secondary" : "destructive"}>
+                    {isCurrentlyInStock() ? "In Stock" : "Out of Stock"}
                   </Badge>
                   {product.isPopular && <Badge>Popular</Badge>}
                 </div>
@@ -213,10 +254,39 @@ export function ProductDetailPage() {
                 <p className="text-muted-foreground leading-relaxed">{product.description}</p>
               </div>
 
+              {/* Size Selector - if variants exist */}
+              {product.variants && product.variants.length > 0 && (
+                <div>
+                  <h3 className="mb-3">Select Size</h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    {product.variants.map(variant => (
+                      <button
+                        key={variant.id}
+                        onClick={() => setSelectedVariant(variant.id)}
+                        disabled={!variant.inStock}
+                        className={`p-4 border-2 rounded-lg transition-all text-center ${
+                          selectedVariant === variant.id 
+                            ? 'border-primary bg-primary/5' 
+                            : 'border-border hover:border-primary/50'
+                        } ${!variant.inStock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        <div className="text-sm mb-1">{variant.size}</div>
+                        <div className="font-medium">${variant.price}</div>
+                        {!variant.inStock && (
+                          <div className="text-xs text-muted-foreground mt-1">Out of Stock</div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Size</p>
-                  <p>{product.size}</p>
+                  <p>{selectedVariant && product.variants 
+                    ? product.variants.find(v => v.id === selectedVariant)?.size 
+                    : product.size}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Concentration</p>
@@ -248,7 +318,7 @@ export function ProductDetailPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <Button size="lg" className="w-full" disabled={!product.inStock} onClick={handleAddToCart}>
+                  <Button size="lg" className="w-full" disabled={!isCurrentlyInStock()} onClick={handleAddToCart}>
                     <ShoppingCart className="h-4 w-4 mr-2" />
                     Add to Cart
                   </Button>
@@ -257,6 +327,11 @@ export function ProductDetailPage() {
                     {inWishlist ? 'In Wishlist' : 'Wishlist'}
                   </Button>
                 </div>
+
+                {/* Notify Me button when out of stock */}
+                {!isCurrentlyInStock() && (
+                  <NotifyMeDialog productName={product.name} productId={product.id} />
+                )}
 
                 <div className="grid grid-cols-2 gap-3">
                   <Button
@@ -488,7 +563,9 @@ export function ProductDetailPage() {
                   </div>
                   <div className="flex justify-between py-3 border-b">
                     <span className="text-muted-foreground">Size</span>
-                    <span>{product.size}</span>
+                    <span>{selectedVariant && product.variants 
+                      ? product.variants.find(v => v.id === selectedVariant)?.size 
+                      : product.size}</span>
                   </div>
                   <div className="flex justify-between py-3 border-b">
                     <span className="text-muted-foreground">Concentration</span>

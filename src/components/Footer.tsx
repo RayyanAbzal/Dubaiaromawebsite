@@ -34,6 +34,7 @@ export function Footer() {
               <li><Link to="/unisex" className="text-muted-foreground hover:text-foreground transition-colors">Unisex</Link></li>
               <li><Link to="/attar-oils" className="text-muted-foreground hover:text-foreground transition-colors">Attar Oils</Link></li>
               <li><Link to="/gift-sets" className="text-muted-foreground hover:text-foreground transition-colors">Gift Sets</Link></li>
+              <li><Link to="/gift-card" className="text-muted-foreground hover:text-foreground transition-colors">Gift Cards</Link></li>
             </ul>
           </div>
 
@@ -41,10 +42,10 @@ export function Footer() {
           <div>
             <h4 className="mb-4 uppercase text-sm tracking-wide">Support</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Contact Us</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Shipping & Returns</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Click & Collect</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">FAQ</a></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact Us</Link></li>
+              <li><Link to="/shipping-returns" className="text-muted-foreground hover:text-foreground transition-colors">Shipping & Returns</Link></li>
+              <li><Link to="/stores" className="text-muted-foreground hover:text-foreground transition-colors">Store Locator</Link></li>
+              <li><Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">About Us</Link></li>
               <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Track Order</a></li>
             </ul>
           </div>
@@ -55,28 +56,41 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2 text-muted-foreground">
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                <span>123 Queen Street<br />Auckland CBD, 1010</span>
+                <span>Westfield Manukau<br />1 Leyton Way, Auckland 2104</span>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <a href="tel:+6499999999" className="hover:text-foreground transition-colors">
-                  +64 9 999 9999
+                <a href="tel:02041792292" className="hover:text-foreground transition-colors">
+                  02041792292
                 </a>
               </li>
               <li className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="h-4 w-4 flex-shrink-0" />
-                <a href="mailto:info@dubaiaroma.nz" className="hover:text-foreground transition-colors">
-                  info@dubaiaroma.nz
+                <a href="mailto:dubai.aromanz@gmail.com" className="hover:text-foreground transition-colors">
+                  dubai.aromanz@gmail.com
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-8 border-t text-center">
-          <p className="text-sm text-muted-foreground">
-            &copy; 2025 Dubai Aroma. All rights reserved.
-          </p>
+        <div className="pt-8 border-t">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-muted-foreground">
+              &copy; 2025 Dubai Aroma. All rights reserved.
+            </p>
+            <div className="flex gap-4 text-sm">
+              <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+                Privacy Policy
+              </Link>
+              <Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+                Terms & Conditions
+              </Link>
+              <Link to="/shipping-returns" className="text-muted-foreground hover:text-foreground transition-colors">
+                Shipping & Returns
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

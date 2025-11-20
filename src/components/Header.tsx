@@ -1,4 +1,4 @@
-import { ShoppingCart, Search, Menu, User, X, MapPin, Heart } from 'lucide-react';
+import { ShoppingCart, Search, Menu, User, X, MapPin, Heart, ChevronDown } from 'lucide-react';
 import { Button } from './ui/button';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -14,6 +14,14 @@ import {
   SheetTitle,
   SheetDescription,
 } from './ui/sheet';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from './ui/navigation-menu';
 
 export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -27,12 +35,19 @@ export function Header() {
 
   return (
     <>
-      {/* Top Bar */}
-      <div className="bg-primary text-primary-foreground py-2 text-center text-sm">
-        <Link to="/stores" className="container mx-auto px-4 flex items-center justify-center gap-2 hover:underline">
-          <MapPin className="h-4 w-4" />
-          <span>Visit our Auckland store | Click & Collect Available</span>
-        </Link>
+      {/* Top Bar - Black Friday Promotion */}
+      <div className="bg-black text-white py-2 text-center text-sm">
+        <div className="container mx-auto px-4">
+          <p className="flex items-center justify-center gap-2 flex-wrap">
+            <span className="font-semibold">🎉 Black Friday Sale</span>
+            <span className="hidden sm:inline">•</span>
+            <span>20–29 Nov</span>
+            <span className="hidden sm:inline">•</span>
+            <span className="font-semibold">15% OFF</span>
+            <span className="hidden sm:inline">•</span>
+            <span>Use Code: <span className="bg-white text-black px-2 py-0.5 rounded font-mono">BLK29</span></span>
+          </p>
+        </div>
       </div>
 
       {/* Main Header */}
@@ -88,19 +103,60 @@ export function Header() {
                     Gift Sets
                   </Link>
                   <Link 
-                    to="/stores" 
+                    to="/gift-card" 
                     className="py-2 hover:text-secondary transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Our Stores
+                    Gift Cards
                   </Link>
-                  <Link 
-                    to="/about" 
-                    className="py-2 hover:text-secondary transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    About Us
-                  </Link>
+                  
+                  <div className="pt-4 border-t border-border">
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">About</p>
+                    <div className="flex flex-col gap-3 ml-2">
+                      <Link 
+                        to="/about" 
+                        className="py-2 text-sm hover:text-secondary transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        About Us
+                      </Link>
+                      <Link 
+                        to="/stores" 
+                        className="py-2 text-sm hover:text-secondary transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Our Stores
+                      </Link>
+                      <Link 
+                        to="/contact" 
+                        className="py-2 text-sm hover:text-secondary transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Contact Us
+                      </Link>
+                      <Link 
+                        to="/shipping-returns" 
+                        className="py-2 text-sm hover:text-secondary transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Shipping & Returns
+                      </Link>
+                      <Link 
+                        to="/privacy" 
+                        className="py-2 text-sm hover:text-secondary transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Privacy Policy
+                      </Link>
+                      <Link 
+                        to="/terms" 
+                        className="py-2 text-sm hover:text-secondary transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Terms & Conditions
+                      </Link>
+                    </div>
+                  </div>
                 </nav>
               </SheetContent>
             </Sheet>
@@ -111,7 +167,7 @@ export function Header() {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex gap-8 absolute left-1/2 transform -translate-x-1/2">
+            <nav className="hidden lg:flex gap-6 absolute left-1/2 transform -translate-x-1/2 items-center">
               <Link 
                 to="/women" 
                 className={`text-sm transition-colors ${isActive('/women') ? 'text-secondary' : 'hover:text-secondary'}`}
@@ -142,6 +198,88 @@ export function Header() {
               >
                 Gift Sets
               </Link>
+              <Link 
+                to="/gift-card" 
+                className={`text-sm transition-colors ${isActive('/gift-card') ? 'text-secondary' : 'hover:text-secondary'}`}
+              >
+                Gift Cards
+              </Link>
+              
+              {/* About Dropdown */}
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className="text-sm h-auto py-0 px-0 hover:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent hover:text-secondary transition-colors duration-200">
+                      About
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid w-[200px] gap-0.5 p-2">
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to="/about"
+                              className="block select-none rounded-md px-3 py-2 leading-none no-underline outline-none transition-all duration-200 hover:bg-[var(--color-sand-100)] focus:bg-[var(--color-sand-100)]"
+                            >
+                              <div className="text-sm">About Us</div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to="/stores"
+                              className="block select-none rounded-md px-3 py-2 leading-none no-underline outline-none transition-all duration-200 hover:bg-[var(--color-sand-100)] focus:bg-[var(--color-sand-100)]"
+                            >
+                              <div className="text-sm">Our Stores</div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to="/contact"
+                              className="block select-none rounded-md px-3 py-2 leading-none no-underline outline-none transition-all duration-200 hover:bg-[var(--color-sand-100)] focus:bg-[var(--color-sand-100)]"
+                            >
+                              <div className="text-sm">Contact Us</div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        <li className="border-t border-[var(--color-sand-200)] my-1"></li>
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to="/shipping-returns"
+                              className="block select-none rounded-md px-3 py-2 leading-none no-underline outline-none transition-all duration-200 hover:bg-[var(--color-sand-100)] focus:bg-[var(--color-sand-100)]"
+                            >
+                              <div className="text-sm">Shipping & Returns</div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to="/privacy"
+                              className="block select-none rounded-md px-3 py-2 leading-none no-underline outline-none transition-all duration-200 hover:bg-[var(--color-sand-100)] focus:bg-[var(--color-sand-100)]"
+                            >
+                              <div className="text-sm">Privacy Policy</div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                        <li>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to="/terms"
+                              className="block select-none rounded-md px-3 py-2 leading-none no-underline outline-none transition-all duration-200 hover:bg-[var(--color-sand-100)] focus:bg-[var(--color-sand-100)]"
+                            >
+                              <div className="text-sm">Terms & Conditions</div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
             </nav>
 
             {/* Actions */}

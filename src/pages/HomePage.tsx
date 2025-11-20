@@ -3,17 +3,19 @@ import { ProductCard } from '../components/ProductCard';
 import { CategoryCard } from '../components/CategoryCard';
 import { Hero } from '../components/Hero';
 import { Newsletter } from '../components/Newsletter';
+import { RecentlyViewed } from '../components/RecentlyViewed';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
-import { Filter, X } from 'lucide-react';
+import { Filter, X, Gift } from 'lucide-react';
 import { FilterSidebar } from '../components/FilterSidebar';
 import { useProducts } from '../contexts/ProductsContext';
+import { Link } from 'react-router-dom';
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
   SheetTrigger,
 } from '../components/ui/sheet';
 
@@ -242,34 +244,94 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Store Info */}
-      <section className="py-16 bg-card border-y">
+      {/* Gift Card Banner */}
+      <section className="py-16 bg-gradient-to-br from-[var(--color-sand-50)] to-[var(--color-sand-100)] border-y">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center space-y-6">
-            <div className="space-y-2">
-              <p className="text-sm uppercase tracking-widest text-muted-foreground">Our Promise</p>
-              <h2>Experience Authentic Luxury</h2>
-            </div>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              At Dubai Aroma, we bring you the finest selection of authentic Arabian and international 
-              fragrances. Every bottle is carefully sourced to ensure quality and authenticity. 
-              Visit our Auckland store or order online with convenient Click & Collect service.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-              <div className="space-y-2">
-                <div className="text-3xl">✓</div>
-                <h4>Authentic Products</h4>
-                <p className="text-sm text-muted-foreground">100% genuine fragrances</p>
+          <div className="max-w-5xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Left - Content */}
+              <div className="space-y-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10">
+                  <Gift className="h-8 w-8 text-primary" />
+                </div>
+                <div className="space-y-3">
+                  <h2>Give the Gift of Luxury</h2>
+                  <p className="text-muted-foreground text-lg">
+                    Can't decide on the perfect scent? Let them choose with a Dubai Aroma gift card. 
+                    Available in any amount from $10 to $1000.
+                  </p>
+                </div>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Instant email delivery directly to recipient</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>No expiry date - use anytime</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Redeemable online and at all store locations</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Add a personalized message for that special touch</span>
+                  </li>
+                </ul>
+                <div className="flex flex-wrap gap-4 pt-2">
+                  <Button size="lg" asChild>
+                    <Link to="/gift-card">
+                      <Gift className="h-5 w-5 mr-2" />
+                      Purchase Gift Card
+                    </Link>
+                  </Button>
+                  <Button size="lg" variant="outline" asChild>
+                    <Link to="/gift-card">
+                      Learn More
+                    </Link>
+                  </Button>
+                </div>
               </div>
-              <div className="space-y-2">
-                <div className="text-3xl">✓</div>
-                <h4>Click & Collect</h4>
-                <p className="text-sm text-muted-foreground">Ready in 2 hours</p>
-              </div>
-              <div className="space-y-2">
-                <div className="text-3xl">✓</div>
-                <h4>Expert Advice</h4>
-                <p className="text-sm text-muted-foreground">Personalized recommendations</p>
+
+              {/* Right - Visual */}
+              <div className="relative">
+                <div className="aspect-[4/3] rounded-lg overflow-hidden shadow-2xl">
+                  <div className="w-full h-full bg-gradient-to-br from-amber-600 to-yellow-700 p-8 flex flex-col justify-between text-white relative overflow-hidden">
+                    {/* Background Pattern */}
+                    <div 
+                      className="absolute inset-0 opacity-20"
+                      style={{
+                        backgroundImage: 'url(https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&h=500&fit=crop)',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                      }}
+                    />
+                    
+                    {/* Content */}
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-2 mb-8">
+                        <Gift className="h-6 w-6" />
+                        <span className="text-lg tracking-[0.3em] uppercase">Dubai Aroma</span>
+                      </div>
+                      
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-4">
+                        <p className="text-sm italic">"For someone special who deserves the finest fragrances"</p>
+                      </div>
+                    </div>
+                    
+                    <div className="relative z-10 flex justify-between items-end">
+                      <div>
+                        <p className="text-sm opacity-90 mb-1">Gift Card Value</p>
+                        <p className="text-4xl font-light">Any Amount</p>
+                      </div>
+                      <div className="text-right text-xs opacity-75">
+                        <p>Redeemable anywhere</p>
+                        <p>Never expires</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -277,6 +339,7 @@ export function HomePage() {
       </section>
 
       <Newsletter />
+      <RecentlyViewed />
     </>
   );
 }

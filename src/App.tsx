@@ -17,6 +17,11 @@ import { StoresPage } from './pages/StoresPage';
 import { WishlistPage } from './pages/WishlistPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { AdminProductFormPage } from './pages/AdminProductFormPage';
+import { TermsPage } from './pages/TermsPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { ShippingReturnsPage } from './pages/ShippingReturnsPage';
+import { ContactPage } from './pages/ContactPage';
+import { GiftCardPage } from './pages/GiftCardPage';
 import { Toaster } from './components/ui/sonner';
 import { CartProvider } from './contexts/CartContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -102,6 +107,11 @@ export default function App() {
                       } 
                     />
                     <Route path="/about" element={<AboutPage />} />
+                    <Route path="/terms" element={<TermsPage />} />
+                    <Route path="/privacy" element={<PrivacyPage />} />
+                    <Route path="/shipping-returns" element={<ShippingReturnsPage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/gift-card" element={<GiftCardPage />} />
                     {/* Catch-all route - redirect to home */}
                     <Route path="*" element={<Navigate to="/" replace />} />
                   </Routes>

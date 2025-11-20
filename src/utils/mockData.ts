@@ -1,4 +1,12 @@
 // Centralized mock data for products
+export interface ProductVariant {
+  id: string;
+  size: string;
+  price: number;
+  inStock: boolean;
+  sku?: string;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -17,6 +25,7 @@ export interface Product {
   middleNotes: string[];
   baseNotes: string[];
   images: string[];
+  variants?: ProductVariant[]; // Optional variants for different sizes
 }
 
 export const allProducts: Product[] = [
@@ -40,6 +49,29 @@ export const allProducts: Product[] = [
     images: [
       'https://images.unsplash.com/photo-1737424065216-bc51dd626175?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvdWQlMjBmcmFncmFuY2UlMjBib3R0bGV8ZW58MXx8fHwxNzYxNzAwMDE0fDA&ixlib=rb-4.1.0&q=80&w=1080',
       'https://images.unsplash.com/photo-1650686036849-ff87bcaa2e9e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBhcmFiaWMlMjBwZXJmdW1lfGVufDF8fHx8MTc2MTU3NTgwMHww&ixlib=rb-4.1.0&q=80&w=1080'
+    ],
+    variants: [
+      {
+        id: 'oud-royale-30ml',
+        size: '30ml',
+        price: 95,
+        inStock: true,
+        sku: 'OR-30'
+      },
+      {
+        id: 'oud-royale-50ml',
+        size: '50ml',
+        price: 145,
+        inStock: true,
+        sku: 'OR-50'
+      },
+      {
+        id: 'oud-royale-100ml',
+        size: '100ml',
+        price: 185,
+        inStock: true,
+        sku: 'OR-100'
+      }
     ]
   },
   {
@@ -275,7 +307,8 @@ export interface Store {
   phone: string;
   email: string;
   hours: {
-    weekday: string;
+    monWed: string;
+    thursFri: string;
     saturday: string;
     sunday: string;
   };
@@ -289,59 +322,62 @@ export interface Store {
 export const stores: Store[] = [
   {
     id: 1,
-    name: 'Auckland CBD Store',
-    address: '123 Queen Street',
+    name: 'Westfield Manukau',
+    address: '1 Leyton Way, Manukau City Centre (Opposite Adidas)',
     city: 'Auckland',
-    postcode: '1010',
-    phone: '+64 9 123 4567',
-    email: 'auckland@dubaiaroma.nz',
+    postcode: '2104',
+    phone: '02041792292',
+    email: 'dubai.aromanz@gmail.com',
     hours: {
-      weekday: '9:00 AM - 6:00 PM',
-      saturday: '10:00 AM - 5:00 PM',
-      sunday: '11:00 AM - 4:00 PM'
+      monWed: '9:00 AM - 6:00 PM',
+      thursFri: '9:00 AM - 9:00 PM',
+      saturday: '9:00 AM - 6:00 PM',
+      sunday: '10:00 AM - 5:30 PM'
     },
     coordinates: {
-      lat: -36.8485,
-      lng: 174.7633
+      lat: -37.0026,
+      lng: 174.8792
     },
     image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
   },
   {
     id: 2,
-    name: 'Newmarket Store',
-    address: '277 Broadway',
+    name: 'Westfield St Lukes',
+    address: '80 Saint Lukes Road, Mount Albert',
     city: 'Auckland',
-    postcode: '1023',
-    phone: '+64 9 234 5678',
-    email: 'newmarket@dubaiaroma.nz',
+    postcode: '1025',
+    phone: '02041792292',
+    email: 'dubai.aromanz@gmail.com',
     hours: {
-      weekday: '9:00 AM - 6:00 PM',
-      saturday: '10:00 AM - 5:00 PM',
-      sunday: '11:00 AM - 4:00 PM'
+      monWed: '9:00 AM - 6:00 PM',
+      thursFri: '9:00 AM - 9:00 PM',
+      saturday: '9:00 AM - 6:00 PM',
+      sunday: '10:00 AM - 5:30 PM'
     },
     coordinates: {
-      lat: -36.8687,
-      lng: 174.7772
+      lat: -36.8739,
+      lng: 174.7360
     },
     image: 'https://images.unsplash.com/photo-1555421689-491a97ff2040?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
   },
   {
     id: 3,
-    name: 'Wellington Store',
-    address: '45 Lambton Quay',
-    city: 'Wellington',
-    postcode: '6011',
-    phone: '+64 4 345 6789',
-    email: 'wellington@dubaiaroma.nz',
+    name: 'The Base Hamilton',
+    address: 'Corner of Te Rapa Road & Wairere Drive',
+    city: 'Hamilton',
+    postcode: '3200',
+    phone: '02041792292',
+    email: 'dubai.aromanz@gmail.com',
     hours: {
-      weekday: '9:00 AM - 6:00 PM',
-      saturday: '10:00 AM - 5:00 PM',
-      sunday: 'Closed'
+      monWed: '9:00 AM - 6:00 PM',
+      thursFri: '9:00 AM - 9:00 PM',
+      saturday: '9:00 AM - 6:00 PM',
+      sunday: '10:00 AM - 5:30 PM'
     },
     coordinates: {
-      lat: -41.2865,
-      lng: 174.7762
+      lat: -37.7372,
+      lng: 175.2433
     },
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
+    image: 'https://images.unsplash.com/photo-1567958451986-2de427a4a0be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
   }
 ];

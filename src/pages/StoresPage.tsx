@@ -180,8 +180,12 @@ export function StoresPage() {
                           </div>
                           <div className="ml-7 space-y-2 text-sm">
                             <div className="flex justify-between">
-                              <span className="text-muted-foreground">Monday - Friday</span>
-                              <span>{selectedStore.hours.weekday}</span>
+                              <span className="text-muted-foreground">Monday - Wednesday</span>
+                              <span>{selectedStore.hours.monWed}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Thursday - Friday</span>
+                              <span>{selectedStore.hours.thursFri}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-muted-foreground">Saturday</span>
