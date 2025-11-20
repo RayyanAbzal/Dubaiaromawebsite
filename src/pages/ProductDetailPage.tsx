@@ -27,14 +27,16 @@ import {
   ThumbsUp
 } from 'lucide-react';
 import { ProductCard } from '../components/ProductCard';
-import { allProducts, mockReviews, Review } from '../utils/mockData';
+import { mockReviews, Review } from '../utils/mockData';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
+import { useProducts } from '../contexts/ProductsContext';
 import { toast } from 'sonner';
 
 export function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { products: allProducts } = useProducts();
   const [selectedImage, setSelectedImage] = useState(0);
   const [showStoreDialog, setShowStoreDialog] = useState(false);
   const [showClickCollect, setShowClickCollect] = useState(false);

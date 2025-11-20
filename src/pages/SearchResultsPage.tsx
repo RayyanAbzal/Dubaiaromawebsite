@@ -6,6 +6,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Filter, Search, X } from 'lucide-react';
+import { useProducts } from '../contexts/ProductsContext';
 import {
   Sheet,
   SheetContent,
@@ -14,11 +15,11 @@ import {
   SheetDescription,
   SheetTrigger,
 } from '../components/ui/sheet';
-import { allProducts } from '../utils/mockData';
 
 export function SearchResultsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { products: allProducts } = useProducts();
   
   const initialQuery = searchParams.get('q') || '';
   const [searchQuery, setSearchQuery] = useState(initialQuery);

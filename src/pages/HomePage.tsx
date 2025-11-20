@@ -7,6 +7,7 @@ import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Filter, X } from 'lucide-react';
 import { FilterSidebar } from '../components/FilterSidebar';
+import { useProducts } from '../contexts/ProductsContext';
 import {
   Sheet,
   SheetContent,
@@ -22,104 +23,15 @@ interface Product {
   category: string;
   price: number;
   image: string;
-  notes: string[];
-  inStock: boolean;
-  isPopular: boolean;
-  popularity: number;
+  notes?: string[];
+  inStock?: boolean;
+  isPopular?: boolean;
+  popularity?: number;
 }
 
-const allProducts: Product[] = [
-  {
-    id: 1,
-    name: 'Oud Royale',
-    category: "Men's Fragrances",
-    price: 185,
-    image: 'https://images.unsplash.com/photo-1737424065216-bc51dd626175?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvdWQlMjBmcmFncmFuY2UlMjBib3R0bGV8ZW58MXx8fHwxNzYxNzAwMDE0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    notes: ['Oud', 'Amber', 'Sandalwood'],
-    inStock: true,
-    isPopular: true,
-    popularity: 95
-  },
-  {
-    id: 2,
-    name: 'Rose de Damascus',
-    category: "Women's Fragrances",
-    price: 165,
-    image: 'https://images.unsplash.com/photo-1759793499819-bf60128a54b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbGVnYW50JTIwZnJhZ3JhbmNlJTIwZGlzcGxheXxlbnwxfHx8fDE3NjE2OTk2NDV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    notes: ['Rose', 'Jasmine', 'Musk'],
-    inStock: true,
-    isPopular: true,
-    popularity: 88
-  },
-  {
-    id: 3,
-    name: 'Saffron Noir',
-    category: 'Unisex',
-    price: 145,
-    image: 'https://images.unsplash.com/photo-1641926364601-2165cf2304cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXNjdWxpbmUlMjBjb2xvZ25lfGVufDF8fHx8MTc2MTY5OTY0Nnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    notes: ['Saffron', 'Patchouli', 'Vanilla'],
-    inStock: true,
-    isPopular: false,
-    popularity: 72
-  },
-  {
-    id: 4,
-    name: 'Amber Essence',
-    category: 'Attar Oils',
-    price: 95,
-    image: 'https://images.unsplash.com/photo-1604899083099-75cacc0902dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwcGVyZnVtZXxlbnwxfHx8fDE3NjE2OTk2NDV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    notes: ['Amber', 'Sandalwood', 'Musk'],
-    inStock: true,
-    isPopular: true,
-    popularity: 90
-  },
-  {
-    id: 5,
-    name: 'Musk Al Tahara',
-    category: 'Unisex',
-    price: 75,
-    image: 'https://images.unsplash.com/photo-1752214939559-ab5e7c86cd85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmbG9yYWwlMjBmcmFncmFuY2V8ZW58MXx8fHwxNjE2NTc3Mjl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    notes: ['Musk', 'Rose'],
-    inStock: false,
-    isPopular: false,
-    popularity: 65
-  },
-  {
-    id: 6,
-    name: 'Bergamot Breeze',
-    category: "Women's Fragrances",
-    price: 125,
-    image: 'https://images.unsplash.com/photo-1659450013573-b2d6b39f916a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwZXJmdW1lJTIwYm90dGxlcyUyMGNvbGxlY3Rpb258ZW58MXx8fHwxNzYxNjM1NTA3fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    notes: ['Bergamot', 'Jasmine', 'Vanilla'],
-    inStock: true,
-    isPopular: false,
-    popularity: 78
-  },
-  {
-    id: 7,
-    name: 'Sandalwood Premium',
-    category: "Men's Fragrances",
-    price: 155,
-    image: 'https://images.unsplash.com/photo-1650686036849-ff87bcaa2e9e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBhcmFiaWMlMjBwZXJmdW1lfGVufDF8fHx8MTc2MTU3NTgwMHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    notes: ['Sandalwood', 'Oud', 'Amber'],
-    inStock: true,
-    isPopular: true,
-    popularity: 85
-  },
-  {
-    id: 8,
-    name: 'Jasmine Nights',
-    category: "Women's Fragrances",
-    price: 135,
-    image: 'https://images.unsplash.com/photo-1734647543247-5ee8bf6f2f3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwZXJmdW1lJTIwc3RvcmUlMjBpbnRlcmlvcnxlbnwxfHx8fDE3NjE2NTc3Mjh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    notes: ['Jasmine', 'Rose', 'Patchouli'],
-    inStock: true,
-    isPopular: false,
-    popularity: 70
-  }
-];
-
 export function HomePage() {
+  const { products: allProducts } = useProducts();
+
   const [selectedNotes, setSelectedNotes] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -158,7 +70,7 @@ export function HomePage() {
 
     if (selectedNotes.length > 0) {
       filtered = filtered.filter(product =>
-        product.notes.some(note => selectedNotes.includes(note))
+        product.notes && product.notes.some(note => selectedNotes.includes(note))
       );
     }
 
@@ -170,7 +82,7 @@ export function HomePage() {
 
     switch (sortBy) {
       case 'popular':
-        filtered.sort((a, b) => b.popularity - a.popularity);
+        filtered.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
         break;
       case 'price-low':
         filtered.sort((a, b) => a.price - b.price);

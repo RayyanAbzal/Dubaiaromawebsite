@@ -4,6 +4,7 @@ import { FilterSidebar } from '../components/FilterSidebar';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { Filter, X } from 'lucide-react';
+import { useProducts } from '../contexts/ProductsContext';
 import {
   Sheet,
   SheetContent,
@@ -12,7 +13,6 @@ import {
   SheetDescription,
   SheetTrigger,
 } from '../components/ui/sheet';
-import { allProducts } from '../utils/mockData';
 
 interface CategoryPageProps {
   category: string;
@@ -21,6 +21,7 @@ interface CategoryPageProps {
 }
 
 export function CategoryPage({ category, title, description }: CategoryPageProps) {
+  const { products: allProducts } = useProducts();
   const [selectedNotes, setSelectedNotes] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -32,7 +33,7 @@ export function CategoryPage({ category, title, description }: CategoryPageProps
 
     if (selectedNotes.length > 0) {
       filtered = filtered.filter(product =>
-        product.notes.some(note => selectedNotes.includes(note))
+        product.notes && product.notes.some(note => selectedNotes.includes(note))
       );
     }
 

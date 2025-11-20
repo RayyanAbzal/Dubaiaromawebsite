@@ -15,94 +15,104 @@ import { OrderConfirmationPage } from './pages/OrderConfirmationPage';
 import { SearchResultsPage } from './pages/SearchResultsPage';
 import { StoresPage } from './pages/StoresPage';
 import { WishlistPage } from './pages/WishlistPage';
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import { AdminProductFormPage } from './pages/AdminProductFormPage';
 import { Toaster } from './components/ui/sonner';
 import { CartProvider } from './contexts/CartContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { WishlistProvider } from './contexts/WishlistContext';
+import { ProductsProvider } from './contexts/ProductsContext';
 
 export default function App() {
   return (
     <AuthProvider>
-      <WishlistProvider>
-        <CartProvider>
-          <Router>
-            <ScrollToTop />
-            <div className="min-h-screen bg-background flex flex-col">
-              <Header />
-              <main className="flex-1">
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/product/:id" element={<ProductDetailPage />} />
-                  <Route path="/signin" element={<SignInPage />} />
-                  <Route path="/signup" element={<SignUpPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/wishlist" element={<WishlistPage />} />
-                  <Route path="/checkout" element={<CheckoutPage />} />
-                  <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
-                  <Route path="/search" element={<SearchResultsPage />} />
-                  <Route path="/stores" element={<StoresPage />} />
-                  <Route 
-                    path="/women" 
-                    element={
-                      <CategoryPage 
-                        category="Women's Fragrances"
-                        title="Women's Fragrances"
-                        description="Discover our exquisite collection of feminine fragrances, from delicate florals to bold orientals. Each perfume tells a unique story of elegance and sophistication."
-                      />
-                    } 
-                  />
-                  <Route 
-                    path="/men" 
-                    element={
-                      <CategoryPage 
-                        category="Men's Fragrances"
-                        title="Men's Fragrances"
-                        description="Explore our premium selection of men's colognes and perfumes. From fresh and sporty to deep and woody, find your signature scent."
-                      />
-                    } 
-                  />
-                  <Route 
-                    path="/unisex" 
-                    element={
-                      <CategoryPage 
-                        category="Unisex"
-                        title="Unisex Fragrances"
-                        description="Experience the versatility of our unisex collection. These captivating scents transcend traditional boundaries, perfect for anyone who appreciates quality."
-                      />
-                    } 
-                  />
-                  <Route 
-                    path="/attar-oils" 
-                    element={
-                      <CategoryPage 
-                        category="Attar Oils"
-                        title="Attar Oils"
-                        description="Discover the ancient art of attar perfumery. Our authentic oil-based fragrances offer long-lasting, alcohol-free scents in the traditional Middle Eastern style."
-                      />
-                    } 
-                  />
-                  <Route 
-                    path="/gift-sets" 
-                    element={
-                      <CategoryPage 
-                        category="Gift Sets"
-                        title="Gift Sets"
-                        description="Find the perfect gift with our curated fragrance sets. Beautifully packaged collections ideal for any special occasion."
-                      />
-                    } 
-                  />
-                  <Route path="/about" element={<AboutPage />} />
-                  {/* Catch-all route - redirect to home */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </main>
-              <Footer />
-              <Toaster />
-            </div>
-          </Router>
-        </CartProvider>
-      </WishlistProvider>
+      <ProductsProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <Router>
+              <ScrollToTop />
+              <div className="min-h-screen bg-background flex flex-col">
+                <Header />
+                <main className="flex-1">
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/product/:id" element={<ProductDetailPage />} />
+                    <Route path="/signin" element={<SignInPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/cart" element={<CartPage />} />
+                    <Route path="/wishlist" element={<WishlistPage />} />
+                    <Route path="/checkout" element={<CheckoutPage />} />
+                    <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
+                    <Route path="/search" element={<SearchResultsPage />} />
+                    <Route path="/stores" element={<StoresPage />} />
+                    
+                    {/* Admin Routes */}
+                    <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+                    <Route path="/admin/products/new" element={<AdminProductFormPage />} />
+                    <Route path="/admin/products/edit/:id" element={<AdminProductFormPage />} />
+                    <Route 
+                      path="/women" 
+                      element={
+                        <CategoryPage 
+                          category="Women's Fragrances"
+                          title="Women's Fragrances"
+                          description="Discover our exquisite collection of feminine fragrances, from delicate florals to bold orientals. Each perfume tells a unique story of elegance and sophistication."
+                        />
+                      } 
+                    />
+                    <Route 
+                      path="/men" 
+                      element={
+                        <CategoryPage 
+                          category="Men's Fragrances"
+                          title="Men's Fragrances"
+                          description="Explore our premium selection of men's colognes and perfumes. From fresh and sporty to deep and woody, find your signature scent."
+                        />
+                      } 
+                    />
+                    <Route 
+                      path="/unisex" 
+                      element={
+                        <CategoryPage 
+                          category="Unisex"
+                          title="Unisex Fragrances"
+                          description="Experience the versatility of our unisex collection. These captivating scents transcend traditional boundaries, perfect for anyone who appreciates quality."
+                        />
+                      } 
+                    />
+                    <Route 
+                      path="/attar-oils" 
+                      element={
+                        <CategoryPage 
+                          category="Attar Oils"
+                          title="Attar Oils"
+                          description="Discover the ancient art of attar perfumery. Our authentic oil-based fragrances offer long-lasting, alcohol-free scents in the traditional Middle Eastern style."
+                        />
+                      } 
+                    />
+                    <Route 
+                      path="/gift-sets" 
+                      element={
+                        <CategoryPage 
+                          category="Gift Sets"
+                          title="Gift Sets"
+                          description="Find the perfect gift with our curated fragrance sets. Beautifully packaged collections ideal for any special occasion."
+                        />
+                      } 
+                    />
+                    <Route path="/about" element={<AboutPage />} />
+                    {/* Catch-all route - redirect to home */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Routes>
+                </main>
+                <Footer />
+                <Toaster />
+              </div>
+            </Router>
+          </CartProvider>
+        </WishlistProvider>
+      </ProductsProvider>
     </AuthProvider>
   );
 }
