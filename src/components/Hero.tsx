@@ -19,7 +19,7 @@ export function Hero() {
           </div>
           <p className="text-lg text-white/90 max-w-xl leading-relaxed">
             Experience the finest collection of oud, attar oils, and premium perfumes. 
-            Now available with Click & Collect in Auckland.
+            Now available in Auckland and Hamilton.
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
             <Link to="/women">

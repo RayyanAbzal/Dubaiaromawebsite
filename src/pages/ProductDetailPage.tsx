@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
+import { useWishlist } from '../contexts/WishlistContext';
+import { useProducts } from '../contexts/ProductsContext';
+import { stores } from '../utils/mockData';
+import { ProductCard } from '../components/ProductCard';
+import { mockReviews, Review } from '../utils/mockData';
+import { addToRecentlyViewed } from '../components/RecentlyViewed';
+import { NotifyMeDialog } from '../components/NotifyMeDialog';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
@@ -15,25 +22,21 @@ import {
   DialogTitle,
 } from '../components/ui/dialog';
 import {
-  ChevronLeft,
-  ShoppingCart,
   Heart,
+  ShoppingCart,
+  Share2,
+  Star,
+  ThumbsUp,
   MapPin,
   Package,
   Shield,
   Truck,
-  Star,
-  Share2,
-  ThumbsUp
+  ChevronLeft,
+  Phone,
+  Check,
 } from 'lucide-react';
-import { ProductCard } from '../components/ProductCard';
-import { mockReviews, Review } from '../utils/mockData';
-import { useCart } from '../contexts/CartContext';
-import { useWishlist } from '../contexts/WishlistContext';
-import { useProducts } from '../contexts/ProductsContext';
+import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { toast } from 'sonner';
-import { addToRecentlyViewed } from '../components/RecentlyViewed';
-import { NotifyMeDialog } from '../components/NotifyMeDialog';
 
 export function ProductDetailPage() {
   const { id } = useParams();
@@ -41,7 +44,6 @@ export function ProductDetailPage() {
   const { products: allProducts } = useProducts();
   const [selectedImage, setSelectedImage] = useState(0);
   const [showStoreDialog, setShowStoreDialog] = useState(false);
-  const [showClickCollect, setShowClickCollect] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
@@ -333,24 +335,14 @@ export function ProductDetailPage() {
                   <NotifyMeDialog productName={product.name} productId={product.id} />
                 )}
 
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    variant="secondary"
-                    className="w-full"
-                    onClick={() => setShowStoreDialog(true)}
-                  >
-                    <MapPin className="h-4 w-4 mr-2" />
-                    Check in Store
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="w-full"
-                    onClick={() => setShowClickCollect(true)}
-                  >
-                    <Package className="h-4 w-4 mr-2" />
-                    Click & Collect
-                  </Button>
-                </div>
+                <Button
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => setShowStoreDialog(true)}
+                >
+                  <MapPin className="h-4 w-4 mr-2" />
+                  Check in Store
+                </Button>
 
                 <Button variant="ghost" className="w-full">
                   <Share2 className="h-4 w-4 mr-2" />
@@ -372,7 +364,7 @@ export function ProductDetailPage() {
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Package className="h-5 w-5 text-secondary" />
-                  <span>Ready for Click & Collect in 2 Hours</span>
+                  <span>Store Pickup Available</span>
                 </div>
               </div>
             </div>
@@ -598,66 +590,49 @@ export function ProductDetailPage() {
 
       {/* Store Availability Dialog */}
       <Dialog open={showStoreDialog} onOpenChange={setShowStoreDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Check Store Availability</DialogTitle>
             <DialogDescription>
-              {product.name} - {product.size}
+              {product.name}
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4 space-y-4">
-            <div className="flex items-start gap-4 p-4 border rounded-lg">
-              <MapPin className="h-5 w-5 text-secondary mt-1" />
-              <div className="flex-1">
-                <h4 className="mb-1">Auckland CBD Store</h4>
-                <p className="text-sm text-muted-foreground mb-2">123 Queen Street, Auckland 1010</p>
-                <Badge variant="secondary">{product.inStock ? 'In Stock - 5 available' : 'Out of Stock'}</Badge>
+          <div className="py-3 space-y-3">
+            {stores.map(store => (
+              <div key={store.id} className="flex items-start gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors">
+                <MapPin className="h-4 w-4 text-secondary mt-1 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <h4 className="mb-1 text-sm">{store.name}</h4>
+                  <p className="text-xs text-muted-foreground mb-1">
+                    {store.address}, {store.city}
+                  </p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+                    <Phone className="h-3 w-3" />
+                    <a href={`tel:${store.phone}`} className="hover:text-foreground">{store.phone}</a>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">
+                    {product.inStock ? 'In Stock' : 'Out of Stock'}
+                  </Badge>
+                </div>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  className="text-xs h-8"
+                  asChild
+                >
+                  <a 
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${store.address}, ${store.city}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Directions
+                  </a>
+                </Button>
               </div>
-            </div>
+            ))}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowStoreDialog(false)}>Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Click & Collect Dialog */}
-      <Dialog open={showClickCollect} onOpenChange={setShowClickCollect}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Click & Collect</DialogTitle>
-            <DialogDescription>
-              Ready for pickup in 2 hours at our Auckland store
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4 space-y-4">
-            <div className="p-4 bg-muted/50 rounded-lg space-y-2">
-              <p className="text-sm">Pickup Location</p>
-              <p>Auckland CBD Store</p>
-              <p className="text-sm text-muted-foreground">123 Queen Street, Auckland 1010</p>
-            </div>
-            <div className="p-4 border rounded-lg space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">Product</span>
-                <span>{product.name}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">Quantity</span>
-                <span>{quantity}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between">
-                <span>Total</span>
-                <span className="text-lg">${product.price * quantity}</span>
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowClickCollect(false)}>Cancel</Button>
-            <Button onClick={() => {
-              handleAddToCart();
-              setShowClickCollect(false);
-            }}>Confirm Pickup</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

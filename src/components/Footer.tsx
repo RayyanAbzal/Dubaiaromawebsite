@@ -10,7 +10,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="inline-block">
-              <img src={logo} alt="Dubai Aroma" className="h-16 w-16 hover:opacity-80 transition-opacity" />
+              <span className="text-2xl font-serif tracking-wide">Dubai Aroma</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               Your destination for authentic Arabian and designer fragrances in New Zealand.

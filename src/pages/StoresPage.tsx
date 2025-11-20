@@ -39,7 +39,7 @@ export function StoresPage() {
 
   // Generate directions URL
   const getDirectionsUrl = (store: typeof stores[0]) => {
-    return `https://www.google.com/maps/dir/?api=1&destination=${store.coordinates.lat},${store.coordinates.lng}`;
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${store.address}, ${store.city}`)}`;
   };
 
   return (

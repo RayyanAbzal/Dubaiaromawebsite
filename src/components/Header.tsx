@@ -164,7 +164,7 @@ export function Header() {
 
             {/* Logo */}
             <Link to="/" className="flex items-center">
-              <img src={logo} alt="Dubai Aroma" className="h-16 w-16 hover:opacity-80 transition-opacity" />
+              <span className="text-2xl font-serif tracking-wide">Dubai Aroma</span>
             </Link>
 
             {/* Desktop Navigation */}

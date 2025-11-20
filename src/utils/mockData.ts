@@ -335,8 +335,8 @@ export const stores: Store[] = [
       sunday: '10:00 AM - 5:30 PM'
     },
     coordinates: {
-      lat: -37.0026,
-      lng: 174.8792
+      lat: -37.0024,
+      lng: 174.8796
     },
     image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
   },
@@ -356,7 +356,7 @@ export const stores: Store[] = [
     },
     coordinates: {
       lat: -36.8739,
-      lng: 174.7360
+      lng: 174.7362
     },
     image: 'https://images.unsplash.com/photo-1555421689-491a97ff2040?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
   },
@@ -375,8 +375,8 @@ export const stores: Store[] = [
       sunday: '10:00 AM - 5:30 PM'
     },
     coordinates: {
-      lat: -37.7372,
-      lng: 175.2433
+      lat: -37.7375,
+      lng: 175.2431
     },
     image: 'https://images.unsplash.com/photo-1567958451986-2de427a4a0be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
   }

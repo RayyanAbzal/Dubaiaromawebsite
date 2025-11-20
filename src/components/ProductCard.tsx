@@ -1,22 +1,22 @@
-import { Card, CardContent } from './ui/card';
-import { Button } from './ui/button';
-import { Heart, Store, Package } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
-import { Badge } from './ui/badge';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useCart } from '../contexts/CartContext';
 import { useWishlist } from '../contexts/WishlistContext';
+import { stores } from '../utils/mockData';
+import { Button } from './ui/button';
+import { Heart, Store } from 'lucide-react';
+import { ImageWithFallback } from './figma/ImageWithFallback';
+import { Badge } from './ui/badge';
+import { Card, CardContent } from './ui/card';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter
 } from './ui/dialog';
-import { RadioGroup, RadioGroupItem } from './ui/radio-group';
-import { Label } from './ui/label';
 
 interface ProductCardProps {
   id?: number;
@@ -44,7 +44,6 @@ export function ProductCard({
   size
 }: ProductCardProps) {
   const [showStoreDialog, setShowStoreDialog] = useState(false);
-  const [deliveryMethod, setDeliveryMethod] = useState('delivery');
   const navigate = useNavigate();
   const { addItem } = useCart();
   const { toggleItem, isInWishlist } = useWishlist();
@@ -167,20 +166,6 @@ export function ProductCard({
               >
                 Add to Cart
               </Button>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="w-full"
-                disabled={!inStock}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowStoreDialog(true);
-                  setDeliveryMethod('collect');
-                }}
-              >
-                <Package className="h-4 w-4 mr-2" />
-                Click & Collect
-              </Button>
             </div>
           </div>
         </CardContent>
@@ -188,72 +173,33 @@ export function ProductCard({
 
       {/* Store Availability Dialog */}
       <Dialog open={showStoreDialog} onOpenChange={setShowStoreDialog}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{name}</DialogTitle>
-            <DialogDescription>Check availability and delivery options</DialogDescription>
+            <DialogTitle className="text-base">{name}</DialogTitle>
+            <DialogDescription className="text-sm">Check store availability</DialogDescription>
           </DialogHeader>
           
-          <div className="space-y-4 py-4">
+          <div className="space-y-2 py-3">
             {/* Store Availability */}
-            <div className="bg-muted p-4 rounded-lg space-y-2">
-              <div className="flex items-start gap-3">
-                <Store className="h-5 w-5 text-secondary mt-0.5" />
-                <div>
-                  <h4 className="mb-1">Auckland Store</h4>
-                  <p className="text-sm text-muted-foreground">123 Queen Street, Auckland CBD</p>
-                  <p className="text-sm mt-2">
-                    {inStock ? (
-                      <span className="text-green-600">✓ In Stock - Available Now</span>
-                    ) : (
-                      <span className="text-destructive">Out of Stock</span>
-                    )}
-                  </p>
+            {stores.map((store) => (
+              <div key={store.id} className="bg-muted p-3 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <Store className="h-4 w-4 text-secondary mt-0.5 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <h4 className="mb-1 text-sm">{store.name}</h4>
+                    <p className="text-xs text-muted-foreground mb-2">{store.address}, {store.city}</p>
+                    <Badge variant="secondary" className="text-xs">
+                      {inStock ? 'In Stock' : 'Out of Stock'}
+                    </Badge>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Delivery Method */}
-            {inStock && (
-              <div className="space-y-3">
-                <h4 className="text-sm">Choose your option:</h4>
-                <RadioGroup value={deliveryMethod} onValueChange={setDeliveryMethod}>
-                  <div className="flex items-start space-x-3 border rounded-lg p-3">
-                    <RadioGroupItem value="delivery" id="delivery" className="mt-1" />
-                    <Label htmlFor="delivery" className="cursor-pointer flex-1">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <Package className="h-4 w-4" />
-                          <span>Home Delivery</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          Delivery in 2-3 business days
-                        </p>
-                      </div>
-                    </Label>
-                  </div>
-                  <div className="flex items-start space-x-3 border rounded-lg p-3">
-                    <RadioGroupItem value="collect" id="collect" className="mt-1" />
-                    <Label htmlFor="collect" className="cursor-pointer flex-1">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <Store className="h-4 w-4" />
-                          <span>Click & Collect</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          Ready for pickup in 2 hours
-                        </p>
-                      </div>
-                    </Label>
-                  </div>
-                </RadioGroup>
-              </div>
-            )}
-
-            <Button className="w-full" disabled={!inStock}>
-              {deliveryMethod === 'collect' ? 'Reserve for Pickup' : 'Add to Cart'}
-            </Button>
+            ))}
           </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowStoreDialog(false)}>Close</Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
