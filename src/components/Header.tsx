@@ -6,6 +6,7 @@ import { SearchBar } from './SearchBar';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useWishlist } from '../contexts/WishlistContext';
+import logo from 'figma:asset/1a25be5b0000f72d7e6946a94dc24f6ab7b3130a.png';
 import {
   Sheet,
   SheetContent,
@@ -163,7 +164,7 @@ export function Header() {
 
             {/* Logo */}
             <Link to="/" className="flex items-center">
-              <span className="text-xl tracking-[0.3em] uppercase">Dubai Aroma</span>
+              <img src={logo} alt="Dubai Aroma" className="h-16 w-16 hover:opacity-80 transition-opacity" />
             </Link>
 
             {/* Desktop Navigation */}

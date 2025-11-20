@@ -1,5 +1,6 @@
 import { Instagram, Facebook, Mail, Phone, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logo from 'figma:asset/1a25be5b0000f72d7e6946a94dc24f6ab7b3130a.png';
 
 export function Footer() {
   return (
@@ -8,21 +9,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="tracking-[0.3em] uppercase">Dubai Aroma</h3>
+            <Link to="/" className="inline-block">
+              <img src={logo} alt="Dubai Aroma" className="h-16 w-16 hover:opacity-80 transition-opacity" />
+            </Link>
             <p className="text-sm text-muted-foreground">
               Your destination for authentic Arabian and designer fragrances in New Zealand.
             </p>
-            <div className="flex gap-3">
-              <a href="#" className="text-muted-foreground hover:text-secondary transition-colors">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-secondary transition-colors">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-secondary transition-colors">
-                <Mail className="h-5 w-5" />
-              </a>
-            </div>
           </div>
 
           {/* Shop */}
